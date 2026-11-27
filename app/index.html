@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dompet Keluarga — Atur Uang Keluarga, Tenang Setiap Bulan</title>
+<meta name="description" content="Dompet Keluarga: catat pemasukan dan pengeluaran keluarga, pantau anggaran tiap kategori, dan kejar target tabungan — semua dalam satu halaman.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='8' width='26' height='18' rx='4' fill='%23166534'/%3E%3Crect x='3' y='8' width='26' height='6' rx='3' fill='%23f59e0b'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="logo" aria-hidden="true">
+      <svg viewBox="0 0 32 32" width="30" height="30"><rect x="3" y="8" width="26" height="18" rx="4" fill="#f59e0b"/><rect x="3" y="8" width="26" height="6" rx="3" fill="#d97706"/><circle cx="23" cy="20" r="3" fill="#166534"/><circle cx="23" cy="20" r="1.2" fill="#fff"/></svg>
+    </span>
+    <div>
+      <h1>Dompet Keluarga</h1>
+      <p>Atur uang keluarga, tenang setiap bulan.</p>
+    </div>
+  </div>
+  <div class="monthbox">
+    <label for="monthSelect">Bulan</label>
+    <select id="monthSelect">
+      <option value="2026-11" selected>November 2026</option>
+      <option value="2026-10">Oktober 2026</option>
+      <option value="2026-09">September 2026</option>
+    </select>
+  </div>
+</header>
+
+<nav class="mainnav" aria-label="Navigasi utama">
+  <a href="#/" data-route="ringkasan" class="active">Ringkasan</a>
+  <a href="#/transaksi" data-route="transaksi">Transaksi</a>
+  <a href="#/anggaran" data-route="anggaran">Anggaran</a>
+  <a href="#/target" data-route="target">Target Tabungan</a>
+</nav>
+
+<main>
+  <!-- ============ RINGKASAN ============ -->
+  <section id="view-ringkasan" class="view">
+    <div class="cards">
+      <article class="card income">
+        <h2>Pemasukan</h2>
+        <p class="big" id="sumIncome">Rp 6.500.000</p>
+        <p class="sub">Gaji bulan November</p>
+      </article>
+      <article class="card expense">
+        <h2>Pengeluaran</h2>
+        <p class="big" id="sumExpense">Rp 5.740.000</p>
+        <p class="sub" id="expenseNote">6 kategori aktif</p>
+      </article>
+      <article class="card balance">
+        <h2>Sisa Uang</h2>
+        <p class="big" id="sumBalance">Rp 760.000</p>
+        <p class="sub" id="balanceNote">11,7% dari pemasukan</p>
+      </article>
+      <article class="card saving">
+        <h2>Tabungan Bulan Ini</h2>
+        <p class="big" id="sumSaving">Rp 1.000.000</p>
+        <p class="sub">Dana darurat + liburan</p>
+      </article>
+    </div>
+
+    <div class="grid2">
+      <article class="panel">
+        <h2>Anggaran vs Realisasi</h2>
+        <p class="hint">Batang hijau = anggaran, batang kuning = yang sudah dipakai.</p>
+        <canvas id="budgetChart" width="640" height="300" aria-label="Grafik anggaran versus realisasi per kategori"></canvas>
+        <p class="legend"><span class="swatch budget"></span> Anggaran <span class="swatch spent"></span> Terpakai</p>
+      </article>
+
+      <article class="panel">
+        <h2>Target Tabungan</h2>
+        <div id="goalPreview"></div>
+        <a class="btn ghost" href="#/target">Lihat semua target →</a>
+      </article>
+    </div>
+
+    <article class="panel">
+      <h2>Transaksi Terakhir</h2>
+      <table class="tx" id="recentTable">
+        <thead><tr><th>Tanggal</th><th>Keterangan</th><th>Kategori</th><th class="num">Jumlah</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <a class="btn ghost" href="#/transaksi">Lihat semua transaksi →</a>
+    </article>
+
+    <article class="panel tip">
+      <h2>Tips Bulan Ini</h2>
+      <p id="tipText">Belanja harian sudah memakai 92% anggarannya — sisakan Rp 150.000 sampai akhir bulan. Hiburan masih longgar, tapi jangan ditambah dulu.</p>
+    </article>
+  </section>
+
+  <!-- ============ TRANSAKSI ============ -->
+  <section id="view-transaksi" class="view hidden">
+    <article class="panel">
+      <h2>Tambah Transaksi</h2>
+      <form id="txForm" class="formgrid">
+        <label>Keterangan
+          <input id="fDesc" type="text" required maxlength="80" placeholder="cth: Belanja pasar">
+        </label>
+        <label>Jumlah (Rp)
+          <input id="fAmount" type="number" required min="1000" step="500" placeholder="50000">
+        </label>
+        <label>Jenis
+          <select id="fType">
+            <option value="out">Pengeluaran</option>
+            <option value="in">Pemasukan</option>
+          </select>
+        </label>
+        <label>Kategori
+          <select id="fCategory"></select>
+        </label>
+        <label>Tanggal
+          <input id="fDate" type="date" value="2026-11-27" required>
+        </label>
+        <div class="formactions">
+          <button class="btn primary" type="submit" id="submitTx">Simpan Transaksi</button>
+          <button class="btn ghost" type="button" id="cancelEdit" hidden>Batalkan Edit</button>
+        </div>
+      </form>
+      <p class="hint" id="formHint">Transaksi tersimpan di peramban ini, jadi tetap ada saat halaman dibuka lagi.</p>
+    </article>
+
+    <article class="panel">
+      <h2>Semua Transaksi</h2>
+      <div class="filters">
+        <label>Cari <input id="q" type="search" placeholder="cari keterangan…"></label>
+        <label>Kategori
+          <select id="filterCat"><option value="">Semua kategori</option></select>
+        </label>
+        <label>Jenis
+          <select id="filterType">
+            <option value="">Semua</option>
+            <option value="in">Pemasukan</option>
+            <option value="out">Pengeluaran</option>
+          </select>
+        </label>
+      </div>
+      <table class="tx" id="allTable">
+        <thead><tr><th>Tanggal</th><th>Keterangan</th><th>Kategori</th><th class="num">Jumlah</th><th>Aksi</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <p class="hint" id="txCount"></p>
+    </article>
+  </section>
+
+  <!-- ============ ANGGARAN ============ -->
+  <section id="view-anggaran" class="view hidden">
+    <article class="panel">
+      <h2>Anggaran per Kategori — November 2026</h2>
+      <p class="hint">Ubah anggaran dengan menekan tombol “Ubah”, lalu tulis angka barunya. Warna batang berubah jadi merah kalau sudah lewat anggaran.</p>
+      <div id="budgetList"></div>
+      <p class="total-line" id="budgetTotals"></p>
+    </article>
+    <article class="panel">
+      <h2>Tambah Kategori Anggaran</h2>
+      <form id="catForm" class="formgrid">
+        <label>Nama kategori
+          <input id="cName" type="text" required maxlength="40" placeholder="cth: Kesehatan">
+        </label>
+        <label>Anggaran bulanan (Rp)
+          <input id="cBudget" type="number" required min="1000" step="1000" placeholder="300000">
+        </label>
+        <div class="formactions">
+          <button class="btn primary" type="submit">Tambah Kategori</button>
+        </div>
+      </form>
+    </article>
+  </section>
+
+  <!-- ============ TARGET ============ -->
+  <section id="view-target" class="view hidden">
+    <article class="panel">
+      <h2>Target Tabungan Keluarga</h2>
+      <p class="hint">Setiap setor menambah saldo target. Target yang tercapai ditandai lunas.</p>
+      <div id="goalList"></div>
+    </article>
+    <article class="panel">
+      <h2>Buat Target Baru</h2>
+      <form id="goalForm" class="formgrid">
+        <label>Nama target
+          <input id="gName" type="text" required maxlength="50" placeholder="cth: Umroh keluarga">
+        </label>
+        <label>Jumlah target (Rp)
+          <input id="gTarget" type="number" required min="10000" step="10000" placeholder="5000000">
+        </label>
+        <label>Sudah terkumpul (Rp)
+          <input id="gSaved" type="number" min="0" step="10000" value="0">
+        </label>
+        <div class="formactions">
+          <button class="btn primary" type="submit">Buat Target</button>
+        </div>
+      </form>
+    </article>
+  </section>
+</main>
+
+<footer>
+  <p>Dompet Keluarga — dibuat untuk keluarga Indonesia. Data tersimpan di perambanmu sendiri, tidak dikirim ke mana pun.</p>
+  <p><a href="#/">Ringkasan</a> · <a href="#/transaksi">Transaksi</a> · <a href="#/anggaran">Anggaran</a> · <a href="#/target">Target Tabungan</a></p>
+</footer>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

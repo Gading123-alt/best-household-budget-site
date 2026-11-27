@@ -1,0 +1,186 @@
+/* Dompet Keluarga — gaya utama. Palet hijau daun + kuning amber di atas krem hangat. */
+:root {
+  --green: #166534;
+  --green-soft: #dcfce7;
+  --green-dark: #14532d;
+  --amber: #f59e0b;
+  --amber-dark: #b45309;
+  --ink: #1c2b21;
+  --muted: #5b6b60;
+  --paper: #faf7f0;
+  --card: #ffffff;
+  --line: #e4ddcd;
+  --red: #b91c1c;
+  --radius: 14px;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.55;
+}
+
+.topbar {
+  background: var(--green);
+  color: #fff;
+  padding: 18px 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand h1 { margin: 0; font-size: 1.5rem; letter-spacing: .2px; }
+.brand p { margin: 0; font-size: .9rem; opacity: .9; }
+.logo { display: inline-flex; }
+
+.monthbox { display: flex; align-items: center; gap: 8px; font-size: .95rem; }
+.monthbox select, select, input {
+  font: inherit;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: #fff;
+  color: var(--ink);
+}
+
+.mainnav {
+  background: var(--green-dark);
+  display: flex;
+  gap: 4px;
+  padding: 0 14px;
+  overflow-x: auto;
+}
+.mainnav a {
+  color: #d1fae5;
+  text-decoration: none;
+  padding: 12px 16px;
+  font-weight: 600;
+  white-space: nowrap;
+  border-bottom: 3px solid transparent;
+}
+.mainnav a.active { color: #fff; border-bottom-color: var(--amber); }
+.mainnav a:hover { color: #fff; }
+
+main { max-width: 1080px; margin: 0 auto; padding: 20px 16px 32px; }
+.view.hidden { display: none; }
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-left: 6px solid var(--green);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+}
+.card.expense { border-left-color: var(--amber); }
+.card.balance { border-left-color: #0e7490; }
+.card.saving { border-left-color: var(--green); }
+.card h2 { margin: 0 0 4px; font-size: .85rem; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+.card .big { margin: 0; font-size: 1.45rem; font-weight: 800; }
+.card .sub { margin: 2px 0 0; font-size: .85rem; color: var(--muted); }
+
+.grid2 { display: grid; grid-template-columns: 3fr 2fr; gap: 16px; margin-bottom: 16px; }
+
+.panel {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  margin-bottom: 16px;
+}
+.panel h2 { margin: 0 0 10px; font-size: 1.15rem; }
+.hint { color: var(--muted); font-size: .9rem; margin-top: 0; }
+.legend { font-size: .9rem; color: var(--muted); }
+.swatch { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin: 0 4px 0 10px; vertical-align: middle; }
+.swatch.budget { background: var(--green); }
+.swatch.spent { background: var(--amber); }
+
+table.tx { width: 100%; border-collapse: collapse; font-size: .95rem; }
+table.tx th, table.tx td { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--line); }
+table.tx th { color: var(--muted); font-size: .82rem; text-transform: uppercase; letter-spacing: .4px; }
+table.tx .num { text-align: right; white-space: nowrap; }
+td.in { color: var(--green); font-weight: 700; }
+td.out { color: var(--red); font-weight: 700; }
+
+.btn {
+  display: inline-block;
+  border: 1px solid var(--green);
+  border-radius: 9px;
+  padding: 9px 16px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  background: #fff;
+  color: var(--green);
+}
+.btn.primary { background: var(--green); color: #fff; }
+.btn.primary:hover { background: var(--green-dark); }
+.btn.ghost:hover { background: var(--green-soft); }
+.btn.small { padding: 4px 10px; font-size: .85rem; margin-right: 6px; }
+.btn.danger { border-color: var(--red); color: var(--red); }
+.btn.danger:hover { background: #fee2e2; }
+
+.formgrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.formgrid label { display: flex; flex-direction: column; gap: 5px; font-weight: 600; font-size: .92rem; }
+.formactions { display: flex; align-items: flex-end; gap: 8px; }
+
+.filters { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+.filters label { font-weight: 600; font-size: .9rem; display: flex; align-items: center; gap: 6px; }
+
+.budgetrow { padding: 12px 0; border-bottom: 1px solid var(--line); }
+.budgetrow:last-child { border-bottom: 0; }
+.budgetrow .rowhead { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.budgetrow .rowhead strong { font-size: 1.02rem; }
+.budgetrow .rowhead span { color: var(--muted); font-size: .92rem; }
+.bar { height: 12px; background: #e7e2d4; border-radius: 6px; margin: 8px 0 4px; overflow: hidden; }
+.bar > i { display: block; height: 100%; background: var(--green); border-radius: 6px; }
+.bar > i.over { background: var(--red); }
+.bar > i.warn { background: var(--amber); }
+.pct { font-size: .88rem; color: var(--muted); }
+.pct b.over { color: var(--red); }
+
+.total-line { font-weight: 700; margin-top: 14px; }
+
+.goal { padding: 12px 0; border-bottom: 1px solid var(--line); }
+.goal:last-child { border-bottom: 0; }
+.goal .rowhead { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.goal .done { color: var(--green); font-weight: 800; }
+.goal .addgoal { display: flex; gap: 8px; margin-top: 8px; }
+.goal .addgoal input { width: 160px; }
+
+.tip { background: #fffbeb; border-color: #fde68a; }
+
+footer { text-align: center; color: var(--muted); font-size: .88rem; padding: 8px 16px 28px; }
+footer a { color: var(--green); }
+
+canvas { width: 100%; height: auto; display: block; }
+
+@media (max-width: 860px) {
+  .cards { grid-template-columns: repeat(2, 1fr); }
+  .grid2 { grid-template-columns: 1fr; }
+  .formgrid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 520px) {
+  .cards { grid-template-columns: 1fr; }
+  .formgrid { grid-template-columns: 1fr; }
+  .brand h1 { font-size: 1.25rem; }
+  table.tx th:nth-child(1), table.tx td:nth-child(1) { display: none; }
+}
